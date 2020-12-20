@@ -1207,10 +1207,6 @@ class Snackbar {
     static snackbars = {};
     static snackbarIDs = [];
 
-    static getSnackbarByID(id) {
-        return snackbarIDs[id];
-    }
-
     /**
      * text is the main requirement, and it's just text
      * color: String - string reference to a color or a variable, sets the background color
@@ -1239,7 +1235,7 @@ class Snackbar {
             setTimeout(() => {
                 timeoutFunction();
                 this.destroy();
-            }, options["timeout"])
+            }, options["timeout"]);
         }
 
         this.id;
@@ -1257,11 +1253,12 @@ class Snackbar {
             return;
         }
 
+        //gives it an ID if it doesn't already have one
         if (this.id === undefined) {
-            this.id = this.createID();
+            this.createID();
         }
 
-        //creates the snackbar and gives it classes and text
+        //creates the snackbar and gives it classes
         const snackbarNode = document.createElement("DIV");
         snackbarNode.classList.add("snackbar");
         snackbarNode.classList.add("hidden");
@@ -1274,7 +1271,7 @@ class Snackbar {
             snackbarNode.style.backgroundColor = `${this.color}`;
         }
 
-        //sets the onClick with which just destroys it by default
+        //sets the body onclick listener which just destroys it by default
         const bodyOnClickFunction = this.bodyClick !== undefined ? () => {this.bodyClick();} : () => {};
         const destroyFromBody = this.destroyWhenBodyClicked ? () => {this.destroy();} : () => {};
         snackbarNode.addEventListener("click", () => {
@@ -1291,7 +1288,7 @@ class Snackbar {
             textNode.style.color = this.textColor;
         }
 
-        //adds the text
+        //adds the text node
         snackbarNode.appendChild(textNode);
 
         //makes the button if given button parameters
@@ -1313,14 +1310,15 @@ class Snackbar {
                 buttonNode.style.backgroundColor = this.color;
             }
 
-            //adds the node
+            //adds the text node
             buttonNode.appendChild(buttonTextNode);
 
-            //adds the onclick and if destroyWhenButtonClicked is true, destroys when the button is clicked (otherwise does nothing)
+            //sets the button onclick listener which runs the given funtion and destroys the snackar by default
             const destroyFromButton = this.destroyWhenButtonClicked ? () => {this.destroy();} : () => {};
             buttonNode.addEventListener("click", (event) => {
                 this.buttonClick();
                 destroyFromButton();
+                //stops propogation so the body event isn't called
                 event.stopPropagation();
             })
 
@@ -1351,7 +1349,8 @@ class Snackbar {
         //if not already made, makes the snackbar
         if (document.getElementById(`snackbar-${this.id}`) === null) {
             this.make();
-            setTimeout(removeHidden, 250);
+            //waits a momement to make sure the snackbar's animation functions properly
+            setTimeout(removeHidden, 10);
             return this;
 
         } else {
@@ -1411,7 +1410,8 @@ class Snackbar {
         }
 
         Snackbar.snackbarIDs.push(id);
-        Snackbar.snackbars[id] = this
+        Snackbar.snackbars[id] = this;
+        this.id = id;
 
         return id;
     }
