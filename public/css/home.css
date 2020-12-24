@@ -1283,7 +1283,7 @@ p#large_clock_period {
 
 .snackbar button {
   height: 32px;
-  margin: 6px 9px 6px 3px;
+  margin: 6px 6px 6px 3px;
   position: relative;
   border: none;
   background-color: var(--gray);
