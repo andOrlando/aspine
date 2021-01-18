@@ -1292,7 +1292,7 @@ p#large_clock_period {
   order: 2;
 }
 
-.snackbar button::after {
+.snackbar button::before {
   content: '';
   height: 100%;
   width: 100%;
@@ -1306,7 +1306,7 @@ p#large_clock_period {
   transition: opacity 100ms ease-in;
 }
 
-.snackbar button:hover::after {
+.snackbar button:hover::before {
   opacity: 1;
 }
 
